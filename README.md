@@ -1,2 +1,2 @@
 # handwriting-springmvc
-手写SpringMvc（配置DispatcherServlet）
+手写SpringMvc（自定义注解、配置DispatcherServlet前置控制器、手写实现Servlet的init方法，利用反射机制+注解（过滤）实例化Bean、创建Bean容器和处理url和method之间的映射关系，并最终实现client端API请求的后端doGet和doPost方法，将结果渲染给前端）
