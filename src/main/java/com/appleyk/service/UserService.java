@@ -19,7 +19,7 @@ import java.util.Date;
 public class UserService {
 
     public String getUser(String name,String sex){
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         System.out.println("你好，欢迎你，"+name +"，sex = "+sex+",当前时间："+df.format(new Date()));
         return "你好，欢迎你，"+name +"，sex = "+sex+",当前时间："+df.format(new Date());
     }

@@ -117,7 +117,6 @@ public class MyDispatcherServlet extends HttpServlet {
                     // set(Object,Object),第一个参数，是这个field属于那个类，第二个是，要给这个field设置哪个对象
                     // 4.5 字段赋值（把从bean容器中拿到的instance，赋给该字段，完成类的依赖bean的注入）
                     declaredField.set(beanInstance,beanMap.get(wriedBeanName));
-                    System.out.println("dadas");
                     /**至此，完成一个注入field的处理，然后就是可以愉快的在类中使用field实例了*/
                 }catch (IllegalAccessException ex){
                     ex.printStackTrace();
@@ -312,7 +311,8 @@ public class MyDispatcherServlet extends HttpServlet {
             // 5.7 遍历参数map，结合req的参数，进行赋值操作（如果前端没传参数，则后台给参数默认值）
             for (Map.Entry<Integer, String> entry : paramMap.entrySet()) {
                 // 给参数赋值，如果req传进来的参数等于空的话，就给默认值
-                paramObjs[entry.getKey()] = req.getParameter(entry.getValue()) == null ? "默认值，这个值最好放在自定义的注解里" : req.getParameter(entry.getValue());
+                paramObjs[entry.getKey()] = req.getParameter(
+                        entry.getValue()) == null ? "默认值，这个值最好放在自定义的注解里" : req.getParameter(entry.getValue());
             }
 
             // 5.8 倒数第二步，一切准备就绪，那就是invoke调用了
