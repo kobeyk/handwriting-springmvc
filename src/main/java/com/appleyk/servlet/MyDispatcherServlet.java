@@ -67,7 +67,7 @@ public class MyDispatcherServlet extends HttpServlet {
         for (Map.Entry<String,Object> entry : beanMap.entrySet()){
             // 1、遍历拿到bean实例
             Object beanInstance = entry.getValue();
-            // 2、获取bean的class
+            // 2、获取bean的class（只有class，才能拿到字段、方法、注解等信息，实例对象无法获取）
             Class<?> classz = beanInstance.getClass();
             // 3、通过反射，拿到class中所有的字段（private、public、protected,但不包含父类的）
             Field[] declaredFields = classz.getDeclaredFields();
@@ -114,7 +114,7 @@ public class MyDispatcherServlet extends HttpServlet {
                 try{
                     // 4.4 放开设置的权限
                     declaredField.setAccessible(true);
-                    // set(Object,Object),第一个参数，是这个field属于那个类，第二个是，要给这个field设置哪个对象
+                    // set(Object,Object),第一个参数，是这个field属于哪个类，第二个是，要给这个field设置哪个对象
                     // 4.5 字段赋值（把从bean容器中拿到的instance，赋给该字段，完成类的依赖bean的注入）
                     declaredField.set(beanInstance,beanMap.get(wriedBeanName));
                     /**至此，完成一个注入field的处理，然后就是可以愉快的在类中使用field实例了*/
@@ -192,6 +192,7 @@ public class MyDispatcherServlet extends HttpServlet {
                     MyController annotation = classz.getAnnotation(MyController.class);
                     // 2.2 根据反射，拿到class的实例
                     instance = classz.newInstance();
+                    // 2.3 如何注解（bean的name值）的value值等于空，就拿类名（注意首字母小写）
                     beanMap.put(annotation.value().equals("") ? lowerFirstCase(classz.getSimpleName()) : annotation.value(),instance);
                 }else if(classz.isAnnotationPresent(MyService.class)){
                     // 3.1 获取MyService注解的value，拿到bean的名称
@@ -222,9 +223,9 @@ public class MyDispatcherServlet extends HttpServlet {
     public void scanPackage(String packageStr){
 
         // 1、将xx.xx结构的包名，转换为实际意义上的xx/xx/路径
-        String pageckageDir = packageStr.replaceAll("\\.", "/");
+        String packageDir = packageStr.replaceAll("\\.", "/");
         // 2、根据包路径，拿到当前类路径（classPath）
-        URL resource = this.getClass().getClassLoader().getResource(pageckageDir);
+        URL resource = this.getClass().getClassLoader().getResource(packageDir);
         // 3、拿到资源的文件（全）路径
         String fileStr = resource.getFile();
         // 4、根据路径创建文件
